@@ -19,9 +19,10 @@
     </div>
 
     <script>
-
+      var interval = null;
       $(document).ready(function(){
 
+        var specificUser = false;
         var index = streams.home.length - 1;
         console.log('index: ' + index);
         //Post initial tweets
@@ -32,10 +33,14 @@
 
         $('.container').on('click', '.row', function(){
           //hide all tweets not affiliated with clicked user
-          var user = $(this).data('user');
-          console.log(user);
+          var clickedUser = $(this).data('user');
+          console.log(clickedUser);
+          $('.row').not('[data-user = "'+clickedUser+'"]').hide();
           //set title to their name
+          $('h1').text(clickedUser);
+          specificUser = true;
           //only display new tweets affiliated with user
+          receiveTweets(true, clickedUser);
         });
 
         $('.container').on('mouseenter', '.row', function(){
@@ -46,15 +51,12 @@
             $(this).toggleClass('pointer');
         });
 
-        setInterval(function(){
-          postTweet(streams.home.length - 1, true);
-        }, 3000);
+        receiveTweets(true);
 
       });
 
-    function postTweet(index, willAnimate){
+    function postTweet(index, willAnimate, passedUser){
       var $cont = $('.container'); 
-      var $toprow = $('.row:first');
       var tweet = streams.home[index];
       // var $tweet = $("<div class='row'></div>");
       var monthNames = [
@@ -66,14 +68,37 @@
       var user = '@' + tweet.user;
       var formDate = monthNames[tweet.created_at.getMonth()] + ' ' + tweet.created_at.getDate();
       var tweetHTML = "<div class='row' data-user=" + user + "><p class='user'>" + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
-      if(willAnimate){
+
+      //If posttweet is called with a passedUser param, only post tweet if that user is the author
+      if(user === passedUser && willAnimate){
         $(tweetHTML).hide().prependTo($cont).slideDown();
       }
-      else{
+      else if(willAnimate && passedUser === undefined){
+        $(tweetHTML).hide().prependTo($cont).slideDown();
+      }
+      //initial load
+      else if (passedUser === undefined){
         $cont.prepend(tweetHTML);
       }
-
     }
+
+    function receiveTweets(willAnimate,passedUser){
+     
+      if(interval){
+        clearInterval(interval);
+      }
+      if(passedUser === undefined){
+        interval = setInterval(function(){
+          postTweet(streams.home.length-1, true);
+        },3000);
+      }
+      else{
+        interval = setInterval(function(){
+          postTweet(streams.home.length-1, true, passedUser);
+        },2000);
+      }
+    }
+
     </script>
   </body>
 </html>
