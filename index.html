@@ -53,21 +53,17 @@
         });
 
         $('button').on('click', function(){
-          $('.row').show()
+          $('.row').show();
           receiveTweets(true);
           $('h1').text('Twittler');
-        })
+        });
 
         receiveTweets(true);
 
       });
 
-<<<<<<< HEAD
     function postTweet(index, willAnimate, passedUser){
-=======
-    //posts tweets
-    function postTweet(index, willAnimate){
->>>>>>> 43cc1e4dcb4b680b0fd30fc5869b15e59195cddb
+
       var $cont = $('.container'); 
       var tweet = streams.home[index];
       var monthNames = [
