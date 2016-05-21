@@ -1,27 +1,67 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <title>Twittler</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
+    <script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+    <div class="page-header">
+      <h1>Twittler</h1>
+    </div>
+    <div class="container">
+
+    </div>
+
     <script>
 
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
 
         var index = streams.home.length - 1;
+        console.log('index: ' + index);
+        //Post initial tweets
         while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
+          postTweet(index);
           index -= 1;
         }
 
+        $('.user').on('click', function(){
+
+        });
+
+        setInterval(function(){
+          postTweet(streams.home.length - 1);
+        }, 3000);
+
       });
 
+    function createTweet(){
+
+    }
+    function postTweet(index){
+      var $cont = $('.container'); 
+      var $toprow = $('.row:first');
+      var tweet = streams.home[index];
+      // var $tweet = $("<div class='row'></div>");
+      var monthNames = [
+        "Jan", "Feb", "Mar",
+        "Apr", "May", "Jun", "Jul",
+        "Aug", "Sep", "Oct",
+        "Nov", "Dec"
+      ];
+      var user = '@' + tweet.user;
+      var formDate = monthNames[tweet.created_at.getMonth()] + ' ' + tweet.created_at.getDay();
+      var tweetHTML = "<div class='row'><p class='user'>" + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
+      //$cont.animate({'padding-top': '50px'});
+      $cont.prepend(tweetHTML);
+
+      // $tweet.appendTo($cont);
+    }
     </script>
   </body>
 </html>

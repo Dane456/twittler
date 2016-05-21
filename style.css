@@ -1,0 +1,33 @@
+/*.page-header, .container,*/ body{
+	background-color: #55acee;
+}
+.page-header{
+	text-align: center;
+	font-family: Arial, sans-serif;
+}
+.container{
+	padding: 10px;
+}
+.row{
+
+	background-color: white;
+	width: 300px;
+	margin: 0 auto;
+	border-radius: 5px;
+	position: relative;
+}
+.user{
+	display: inline-block;
+	font-family: Arial, sans-serif;
+	margin: 5px;
+	font-weight: bold;
+}
+.time{
+	margin-left: 15px;
+	display: inline-block;
+	font-size: 12px;
+	color: gray;
+}
+.message{
+	margin: 0 10px 10px 10px;
+}
