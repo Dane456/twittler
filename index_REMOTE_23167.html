@@ -13,17 +13,15 @@
   <body>
     <div class="page-header">
       <h1>Twittler</h1>
-      <button type="button">Home</button>
     </div>
     <div class="container">
 
     </div>
 
     <script>
-      var interval = null;
+
       $(document).ready(function(){
 
-        var specificUser = false;
         var index = streams.home.length - 1;
         console.log('index: ' + index);
         //Post initial tweets
@@ -34,38 +32,32 @@
 
         $('.container').on('click', '.row', function(){
           //hide all tweets not affiliated with clicked user
-          var clickedUser = $(this).data('user');
-          console.log(clickedUser);
-          $('.row').not('[data-user = "'+clickedUser+'"]').hide();
+          var user = $(this).data('user');
+          console.log(user);
           //set title to their name
-          $('h1').text(clickedUser);
-          specificUser = true;
           //only display new tweets affiliated with user
-          receiveTweets(true, clickedUser);
         });
 
         $('.container').on('mouseenter', '.row', function(){
-            ∂$(this).toggleClass('pointer');
+            $(this).toggleClass('pointer');
         });
 
         $('.container').on('mouseleave', '.row', function(){
             $(this).toggleClass('pointer');
         });
 
-        $('button').on('click', function(){
-          $('.row').show()
-          receiveTweets(true);
-          $('h1').text('Twittler');
-        })
-
-        receiveTweets(true);
+        setInterval(function(){
+          postTweet(streams.home.length - 1, true);
+        }, 3000);
 
       });
 
-    function postTweet(index, willAnimate, passedUser){
-
+    //posts tweets
+    function postTweet(index, willAnimate){
       var $cont = $('.container'); 
+      var $toprow = $('.row:first');
       var tweet = streams.home[index];
+      // var $tweet = $("<div class='row'></div>");
       var monthNames = [
         "Jan", "Feb", "Mar",
         "Apr", "May", "Jun", "Jul",
@@ -75,37 +67,14 @@
       var user = '@' + tweet.user;
       var formDate = monthNames[tweet.created_at.getMonth()] + ' ' + tweet.created_at.getDate();
       var tweetHTML = "<div class='row' data-user=" + user + "><p class='user'>" + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
-
-      //If posttweet is called with a passedUser param, only post tweet if that user is the author
-      if(user === passedUser && willAnimate){
+      if(willAnimate){
         $(tweetHTML).hide().prependTo($cont).slideDown();
-      }
-      else if(willAnimate && passedUser === undefined){
-        $(tweetHTML).hide().prependTo($cont).slideDown();
-      }
-      //initial load
-      else if (passedUser === undefined){
-        $cont.prepend(tweetHTML);
-      }
-    }
-
-    function receiveTweets(willAnimate,passedUser){
-     
-      if(interval){
-        clearInterval(interval);
-      }
-      if(passedUser === undefined){
-        interval = setInterval(function(){
-          postTweet(streams.home.length-1, true);
-        },3000);
       }
       else{
-        interval = setInterval(function(){
-          postTweet(streams.home.length-1, true, passedUser);
-        },2000);
+        $cont.prepend(tweetHTML);
       }
-    }
 
+    }
     </script>
   </body>
 </html>

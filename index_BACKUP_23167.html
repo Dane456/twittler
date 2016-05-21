@@ -45,7 +45,7 @@
         });
 
         $('.container').on('mouseenter', '.row', function(){
-            ∂$(this).toggleClass('pointer');
+            $(this).toggleClass('pointer');
         });
 
         $('.container').on('mouseleave', '.row', function(){
@@ -62,8 +62,12 @@
 
       });
 
+<<<<<<< HEAD
     function postTweet(index, willAnimate, passedUser){
-
+=======
+    //posts tweets
+    function postTweet(index, willAnimate){
+>>>>>>> 43cc1e4dcb4b680b0fd30fc5869b15e59195cddb
       var $cont = $('.container'); 
       var tweet = streams.home[index];
       var monthNames = [
