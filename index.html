@@ -57,10 +57,8 @@
       var user = '@' + tweet.user;
       var formDate = monthNames[tweet.created_at.getMonth()] + ' ' + tweet.created_at.getDay();
       var tweetHTML = "<div class='row'><p class='user'>" + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
-      //$cont.animate({'padding-top': '50px'});
-      $cont.prepend(tweetHTML);
+      $(tweetHTML).hide().prependTo($cont).slideDown();
 
-      // $tweet.appendTo($cont);
     }
     </script>
   </body>

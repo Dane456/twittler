@@ -9,12 +9,11 @@
 	padding: 10px;
 }
 .row{
-
 	background-color: white;
 	width: 300px;
-	margin: 0 auto;
+	margin: 10px auto;
 	border-radius: 5px;
-	position: relative;
+	padding-bottom: 5px;
 }
 .user{
 	display: inline-block;
