@@ -30,3 +30,6 @@
 .message{
 	margin: 0 10px 10px 10px;
 }
+.pointer{
+	cursor: pointer;
+}
