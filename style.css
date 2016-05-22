@@ -1,5 +1,6 @@
-/*.page-header, .container,*/ body{
+body{
 	background-color: #55acee;
+	padding-top: 40px;
 }
 .page-header{
 	text-align: center;

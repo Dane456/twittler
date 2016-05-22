@@ -6,21 +6,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
-    <script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"></script>
-    <script href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css'>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js">
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <div class="page-header">
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">Twittler</a>
+      </div>
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" name='tweet' placeholder="omg...">
+        </div>
+        <button type="button" class="btn btn-default" id="btn-tweet">Tweet</button>
+      </form>
+    </div><!-- /.container-fluid -->
+  </nav>    
+  <div class="page-header">
       <h1>Twittler</h1>
-      <button type="button">Home</button>
-    </div>
-    <div class="container">
-
-    </div>
+      <button type="button" id="button-home">Home</button>
+  </div>
+  <div class="container"></div>
 
     <script>
       var interval = null;
+      window.visitor = '';
       $(document).ready(function(){
 
         var specificUser = false;
@@ -52,57 +64,75 @@
             $(this).toggleClass('pointer');
         });
 
-        $('button').on('click', function(){
+        $('#button-home, a.navbar-brand').on('click', function(){
           $('.row').show();
           receiveTweets(true);
           $('h1').text('Twittler');
+        });
+
+        $('#btn-tweet').on('click', function(){
+          if(!visitor){
+            visitor = prompt('What is your username?');
+            streams.users[visitor] = [];
+
+          }
+          writeTweet($("input[name='tweet']").val());
+          //pull created tweet and post
+
+          postTweet(null,true, visitor);
+          
         });
 
         receiveTweets(true);
 
       });
 
-    function postTweet(index, willAnimate, passedUser){
+    function postTweet(index,willAnimate, passedUser){
 
       var $cont = $('.container'); 
-      var tweet = streams.home[index];
+      if (passedUser){
+        tweet = streams.users[passedUser].pop();
+      }
+      else{
+        tweet = streams.home[index];
+      }
       var monthNames = [
         "Jan", "Feb", "Mar",
         "Apr", "May", "Jun", "Jul",
         "Aug", "Sep", "Oct",
         "Nov", "Dec"
       ];
-      var user = '@' + tweet.user;
+      var user = tweet.user;
       var formDate = monthNames[tweet.created_at.getMonth()] + ' ' + tweet.created_at.getDate();
-      var tweetHTML = "<div class='row' data-user=" + user + "><p class='user'>" + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
+      var tweetHTML = "<div class='row' data-user=" +user + "><p class='user'>"+'@' + user + "</p><p class='time'>" + formDate + "</p><p class='message'>" + tweet.message + "</p></div>";
 
       //If posttweet is called with a passedUser param, only post tweet if that user is the author
-      if(user === passedUser && willAnimate){
+      if(passedUser || willAnimate){
         $(tweetHTML).hide().prependTo($cont).slideDown();
       }
-      else if(willAnimate && passedUser === undefined){
-        $(tweetHTML).hide().prependTo($cont).slideDown();
-      }
+      // else if(willAnimate){
+      //   $(tweetHTML).hide().prependTo($cont).slideDown();
+      // }
       //initial load
-      else if (passedUser === undefined){
+      else if (!passedUser){
         $cont.prepend(tweetHTML);
       }
     }
 
     function receiveTweets(willAnimate,passedUser){
-     
+     //pulls most recently created tweet
       if(interval){
         clearInterval(interval);
       }
       if(passedUser === undefined){
         interval = setInterval(function(){
-          postTweet(streams.home.length-1, true);
+          postTweet(streams.home.length-1,true);
         },3000);
       }
       else{
         interval = setInterval(function(){
-          postTweet(streams.home.length-1, true, passedUser);
-        },2000);
+          postTweet(streams.home.length-1,true, passedUser);
+        },3000);
       }
     }
 
